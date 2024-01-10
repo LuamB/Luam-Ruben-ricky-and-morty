@@ -12,7 +12,7 @@ export function createCharacterCard(
         <img
             class="card__image"
             src=${charImage}
-            alt="Rick Sanchez"
+            alt=${charName}
         />
         <div class="card__image-gradient"></div>
       </div>
