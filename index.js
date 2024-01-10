@@ -1,5 +1,6 @@
 import { createCharacterCard } from "./components/card/card.js";
-import { pageNavigation } from "./components/nav-pagination/nav-pagination.js";
+import { createPagination } from "./components/nav-pagination/nav-pagination.js";
+import { createSearchBar } from "./components/search-bar/search-bar.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector(
@@ -14,7 +15,7 @@ const pagination = document.querySelector('[data-js="pagination"]');
 // States
 let maxPage = 1; //characterData.info.pages
 let page = 1;
-const searchQuery = "";
+let searchQuery = "";
 
 // Fetch and render data
 async function fetchAndRenderData() {
@@ -30,13 +31,22 @@ async function fetchAndRenderData() {
       console.error("Bad request ->", response.status);
       return;
     }
+
     // parsing data
     const characterData = await response.json();
     console.log("data", characterData);
+
     // pagination
     maxPage = characterData.info.pages;
-    pagination.textContent = `${page} / ${maxPage}`;
+    const pageNav = createPagination(page, maxPage);
+    // render pagination
+    // prevButton.append(pButton);
+    navigation.appendChild(pageNav);
+    // nextButton.append(nButton);
 
+    // pagination.textContent = `${page} / ${maxPage}`;
+
+    // compile cards
     characterData.results.forEach((character) => {
       const charId = character.id;
       const charImage = character.image;
@@ -57,6 +67,7 @@ async function fetchAndRenderData() {
         charType,
         charOccurences
       );
+      // render cards
       cardContainer.append(card);
     });
   } catch (error) {
@@ -65,3 +76,14 @@ async function fetchAndRenderData() {
 }
 
 fetchAndRenderData();
+
+// compile & render search bar
+searchBarContainer.append(searchBar);
+const [inputElement, buttonElement, imgElement] = createSearchBar();
+
+// append imgElement to the buttonElement
+buttonElement.appendChild(imgElement);
+
+// append inputElement and buttonElement to the searchBar
+searchBar.appendChild(inputElement);
+searchBar.appendChild(buttonElement);
