@@ -1,5 +1,5 @@
 import { createCharacterCard } from "./components/card/card.js";
-import { createPagination } from "./components/nav-pagination/nav-pagination.js";
+// import { createPagination } from "./components/nav-pagination/nav-pagination.js";
 import { createSearchBar } from "./components/search-bar/search-bar.js";
 
 const cardContainer = document.querySelector('[data-js="card-container"]');
@@ -11,11 +11,16 @@ const navigation = document.querySelector('[data-js="navigation"]');
 const prevButton = document.querySelector('[data-js="button-prev"]');
 const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
+const baseURL = "https://rickandmortyapi.com/api/character";
 
 // States
 let maxPage = 1; //characterData.info.pages
 let page = 1;
 let searchQuery = "";
+
+const queryPage = `/?page=${page}`;
+const queryName = `/?name=${searchQuery}`;
+console.log("combiURL", baseURL + queryName);
 
 // Fetch and render data
 async function fetchAndRenderData() {
@@ -23,10 +28,13 @@ async function fetchAndRenderData() {
 
   try {
     // fetching data
-    const response = await fetch(
-      `https://rickandmortyapi.com/api/character/?page=${page}}`
-    );
-    console.log("response: ", response);
+    if (searchQuery !== "") {
+      const response = await fetch(baseURL + queryName); // `https://rickandmortyapi.com/api/character/?page=${page}`
+      console.log("response: ", response);
+    } else {
+      const response = await fetch(baseURL + queryPage);
+      console.log("response: ", response);
+    }
     if (!response.ok) {
       console.error("Bad request ->", response.status);
       return;
@@ -38,10 +46,12 @@ async function fetchAndRenderData() {
 
     // pagination
     maxPage = characterData.info.pages;
-    const pageNav = createPagination(page, maxPage);
+    pagination.textContent = `${page} / ${maxPage}`;
+    // const pageNav = createPagination(page, maxPage);
     // render pagination
+
     // prevButton.append(pButton);
-    navigation.appendChild(pageNav);
+    // navigation.appendChild(pageNav);
     // nextButton.append(nButton);
 
     // pagination.textContent = `${page} / ${maxPage}`;
@@ -75,11 +85,14 @@ async function fetchAndRenderData() {
   }
 }
 
-fetchAndRenderData();
+// fetchAndRenderData();
 
 // compile & render search bar
 searchBarContainer.append(searchBar);
 const [inputElement, buttonElement, imgElement] = createSearchBar();
+console.log("inputElement: ", inputElement);
+console.log("buttonElement: ", buttonElement);
+console.log("imgElement: ", imgElement);
 
 // append imgElement to the buttonElement
 buttonElement.appendChild(imgElement);
@@ -87,3 +100,33 @@ buttonElement.appendChild(imgElement);
 // append inputElement and buttonElement to the searchBar
 searchBar.appendChild(inputElement);
 searchBar.appendChild(buttonElement);
+
+fetchAndRenderData();
+
+// search input
+inputElement.addEventListener("input", (e) => {
+  e.preventDefault();
+  searchQuery = e.target.value;
+  console.log("searchQuery", searchQuery);
+  fetchAndRenderData();
+});
+
+// Button
+prevButton.addEventListener("click", () => {
+  if (page > 1) {
+    page--;
+    pagination.textContent = `${page} / ${maxPage}`;
+    fetchAndRenderData();
+  } else {
+    page = 1;
+  }
+});
+nextButton.addEventListener("click", () => {
+  if (page < maxPage) {
+    page++;
+    pagination.textContent = `${page} / ${maxPage}`;
+    fetchAndRenderData();
+  } else {
+    page = maxPage;
+  }
+});
