@@ -1,9 +1,8 @@
-// export function createPagination(page, maxPage) {
-//   const pageNav = document.createElement("span");
-//   pageNav.innerHTML = `<span class="navigation__pagination" data-js="pagination">${page} / ${maxPage}</span>`;
-//   return pageNav;
-// }
+// import { createButton } from "../nav-button/nav-button.js";
 
-// export function paginationDisplay(page, maxPage) {
-//   pagination.textContent = `${page} / ${maxPage}`;
-// }
+export function createPagination(page, maxPage) {
+  const pagination = document.createElement("span");
+  pagination.classList.add("navigation__pagination");
+  pagination.textContent = `${page} / ${maxPage}`;
+  return pagination;
+}
