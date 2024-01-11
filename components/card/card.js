@@ -28,5 +28,6 @@ export function createCharacterCard(
         </dl>
       </div>
     </li>`;
+
   return cardElement;
 }

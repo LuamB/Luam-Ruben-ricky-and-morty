@@ -1,81 +1,55 @@
 import { createCharacterCard } from "./components/card/card.js";
-// import { createPagination } from "./components/nav-pagination/nav-pagination.js";
+import {
+  createButton,
+  handlePrevButton,
+  handleNextButton,
+} from "./components/nav-button/nav-button.js";
+import { createPagination } from "./components/nav-pagination/nav-pagination.js";
 import { createSearchBar } from "./components/search-bar/search-bar.js";
 
-const cardContainer = document.querySelector('[data-js="card-container"]');
-const searchBarContainer = document.querySelector(
-  '[data-js="search-bar-container"]'
-);
-const searchBar = document.querySelector('[data-js="search-bar"]');
-const navigation = document.querySelector('[data-js="navigation"]');
-const prevButton = document.querySelector('[data-js="button-prev"]');
-const nextButton = document.querySelector('[data-js="button-next"]');
-const pagination = document.querySelector('[data-js="pagination"]');
-const baseURL = "https://rickandmortyapi.com/api/character";
+const body = document.querySelector("body");
+// const title = document.createElement("h1");
+const main = document.querySelector("main");
+const cardContainer = document.createElement("ul");
+cardContainer.classList.add("card-container");
+
+// const navigation = document.querySelector('[data-js="navigation"]');
+// const pagination = document.querySelector('[data-js="pagination"]');
 
 // States
-let maxPage = 1; //characterData.info.pages
+let maxPage = 1;
 let page = 1;
 let searchQuery = "";
 
-const queryPage = `/?page=${page}`;
-const queryName = `/?name=${searchQuery}`;
-console.log("combiURL", baseURL + queryName);
+// let pageURL = `/?page=${page}`;
+// let nameURL = `/?name=${searchQuery}`;
 
-// Fetch and render data
-async function fetchAndRenderData() {
+//FETCH CHARACTER DATA
+export async function fetchCharacters(page) {
+  let url = `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`;
+  console.log("URL", url);
+
   cardContainer.innerHTML = ``; // empty card container
 
   try {
     // fetching data
-    if (searchQuery !== "") {
-      const response = await fetch(baseURL + queryName); // `https://rickandmortyapi.com/api/character/?page=${page}`
-      console.log("response: ", response);
-    } else {
-      const response = await fetch(baseURL + queryPage);
-      console.log("response: ", response);
-    }
-    if (!response.ok) {
-      console.error("Bad request ->", response.status);
-      return;
-    }
+    const response = await fetch(url);
 
     // parsing data
     const characterData = await response.json();
     console.log("data", characterData);
 
-    // pagination
     maxPage = characterData.info.pages;
-    pagination.textContent = `${page} / ${maxPage}`;
-    // const pageNav = createPagination(page, maxPage);
-    // render pagination
+    console.log("maxPage_in", maxPage);
 
-    // prevButton.append(pButton);
-    // navigation.appendChild(pageNav);
-    // nextButton.append(nButton);
-
-    // pagination.textContent = `${page} / ${maxPage}`;
-
-    // compile cards
+    // create character cards
     characterData.results.forEach((character) => {
-      const charId = character.id;
-      const charImage = character.image;
-      const charName = character.name;
-      const charStatus = character.status;
-      const charType = character.type;
-      const charOccurences = character.episode.length;
-      console.log("charId: ", charId);
-      console.log("charImg: ", charImage);
-      console.log("charName: ", charName);
-      console.log("charStatus: ", charStatus);
-      console.log("charType: ", charType);
-      console.log("charOccurences: ", charOccurences);
       const card = createCharacterCard(
-        charImage,
-        charName,
-        charStatus,
-        charType,
-        charOccurences
+        character.image,
+        character.name,
+        character.status,
+        character.type,
+        character.episode.length
       );
       // render cards
       cardContainer.append(card);
@@ -85,48 +59,36 @@ async function fetchAndRenderData() {
   }
 }
 
-// fetchAndRenderData();
+fetchCharacters();
 
-// compile & render search bar
-searchBarContainer.append(searchBar);
-const [inputElement, buttonElement, imgElement] = createSearchBar();
-console.log("inputElement: ", inputElement);
-console.log("buttonElement: ", buttonElement);
-console.log("imgElement: ", imgElement);
+//PAGINATION
+console.log("maxPage_out & page", maxPage, page);
 
-// append imgElement to the buttonElement
-buttonElement.appendChild(imgElement);
+// create navigation element
+const navigation = document.createElement("nav");
+navigation.classList.add("navigation");
 
-// append inputElement and buttonElement to the searchBar
-searchBar.appendChild(inputElement);
-searchBar.appendChild(buttonElement);
+// create previous & next button
+const [prevButton, nextButton] = createButton();
+// handle navigation
+prevButton.addEventListener("click", () => handlePrevButton(page));
+nextButton.addEventListener("click", () => handleNextButton(page, maxPage));
 
-fetchAndRenderData();
+navigation.append(prevButton);
+navigation.append(nextButton);
 
-// search input
-inputElement.addEventListener("input", (e) => {
-  e.preventDefault();
-  searchQuery = e.target.value;
-  console.log("searchQuery", searchQuery);
-  fetchAndRenderData();
-});
+// create pagination element
+const pagination = createPagination(page, maxPage);
 
-// Button
-prevButton.addEventListener("click", () => {
-  if (page > 1) {
-    page--;
-    pagination.textContent = `${page} / ${maxPage}`;
-    fetchAndRenderData();
-  } else {
-    page = 1;
-  }
-});
-nextButton.addEventListener("click", () => {
-  if (page < maxPage) {
-    page++;
-    pagination.textContent = `${page} / ${maxPage}`;
-    fetchAndRenderData();
-  } else {
-    page = maxPage;
-  }
+// render
+navigation.append(prevButton, pagination, nextButton);
+
+//SEARCH BAR
+const searchBarContainer = createSearchBar();
+
+document.addEventListener("DOMContentLoaded", () => {
+  //RENDER
+  body.append(main);
+  main.append(searchBarContainer, cardContainer);
+  body.append(navigation);
 });
