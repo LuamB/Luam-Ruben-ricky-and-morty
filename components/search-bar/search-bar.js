@@ -1,4 +1,12 @@
 export function createSearchBar() {
+  // create search bar container
+  const searchBarContainer = document.createElement("div");
+  searchBarContainer.classList.add("search-bar-container");
+
+  // create search bar element
+  const searchBar = document.createElement("form");
+  searchBar.classList.add("search-bar");
+
   // create input element
   const inputElement = document.createElement("input");
   inputElement.name = "query";
@@ -18,5 +26,26 @@ export function createSearchBar() {
   imgElement.src = "assets/magnifying-glass.png";
   imgElement.alt = "";
 
-  return [inputElement, buttonElement, imgElement];
+  // rendering
+  buttonElement.append(imgElement);
+  searchBar.appendChild(buttonElement);
+  searchBar.appendChild(inputElement);
+  searchBarContainer.append(searchBar);
+
+  // handle search event
+  searchBar.addEventListener("submit", handleSearch);
+
+  return searchBarContainer;
+}
+
+function handleSearch(e) {
+  e.preventDefault();
+  searchQuery = ""; // empty search
+  searchQuery = e.target.elements.query.value;
+  // nameURL = `/?name=${searchQuery}`;
+  // console.log(e);
+  // const combiURL = baseURL + nameURL;
+  // console.log("searchQuery", searchQuery);
+  // console.log("url", combiURL);
+  fetchCharacters();
 }
