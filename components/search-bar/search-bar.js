@@ -1,8 +1,6 @@
-export function createSearchBar() {
-  // create search bar container
-  const searchBarContainer = document.createElement("div");
-  searchBarContainer.classList.add("search-bar-container");
+import { fetchCharacters } from "../../index.js";
 
+export function createSearchBar() {
   // create search bar element
   const searchBar = document.createElement("form");
   searchBar.classList.add("search-bar");
@@ -28,24 +26,18 @@ export function createSearchBar() {
 
   // rendering
   buttonElement.append(imgElement);
+  searchBar.append(inputElement);
   searchBar.appendChild(buttonElement);
-  searchBar.appendChild(inputElement);
-  searchBarContainer.append(searchBar);
 
   // handle search event
   searchBar.addEventListener("submit", handleSearch);
 
-  return searchBarContainer;
+  return searchBar;
 }
 
 function handleSearch(e) {
   e.preventDefault();
   searchQuery = ""; // empty search
   searchQuery = e.target.elements.query.value;
-  // nameURL = `/?name=${searchQuery}`;
-  // console.log(e);
-  // const combiURL = baseURL + nameURL;
-  // console.log("searchQuery", searchQuery);
-  // console.log("url", combiURL);
-  fetchCharacters();
+  fetchCharacters(page);
 }
