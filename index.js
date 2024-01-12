@@ -6,29 +6,24 @@ import { createSearchBar } from "./components/search-bar/search-bar.js";
 
 /* Global variables */
 const body = document.querySelector("body");
-// const title = document.querySelector("h1");
 const main = document.querySelector("main");
 const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
 );
 const cardContainer = document.querySelector("ul");
-const navigation = document.querySelector('[data-js="navigation"]');
-
-// const pagination = document.querySelector('[data-js="pagination"]');
+let navigation = document.querySelector('[data-js="navigation"]');
 
 /* States */
 let maxPage = 1;
 let page = 1;
 let searchQuery = "";
-// let pageQuery = `/?page=${page}`;
-// let nameQuery = `/?name=${searchQuery}`;
 
 /* FETCH API DATA */
-export async function fetchCharacters(page, searchQuery) {
+export async function fetchCharacters() {
+  cardContainer.innerHTML = ``; // empty card container
+
   let url = `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`;
   console.log(`URL: ${url}`);
-
-  cardContainer.innerHTML = ``; // empty card container
 
   try {
     // fetching data
@@ -40,8 +35,9 @@ export async function fetchCharacters(page, searchQuery) {
   }
 }
 // function call
-let data = await fetchCharacters(page, searchQuery);
+let data = await fetchCharacters();
 console.log("data", data);
+console.log("page", page);
 
 /* CARDS */
 data.results.forEach((character) => {
@@ -65,14 +61,33 @@ searchBarContainer.append(searchBar); // append to container
 maxPage = data.info.pages;
 console.log(`page: ${page} | maxPage:${maxPage}`);
 
-const [prevButton, nextButton] = createButton(); // create navigation buttons
+// create page navigation buttons
+const [prevButton, nextButton] = createButton(page, maxPage); // create navigation buttons
+
+// add functionality
+prevButton.addEventListener("click", () => {
+  if (page > 1) {
+    page--;
+    // Update the page number and fetch the data again
+    fetchCharacters();
+  }
+});
+
+nextButton.addEventListener("click", async () => {
+  if (page < maxPage) {
+    page++;
+    await fetchCharacters();
+  }
+});
+
+console.log("page", page);
 
 const pagination = createPagination(page, maxPage); // create pagination element
+pagination.textContent = `${page} / ${maxPage}`;
 navigation.append(prevButton, pagination, nextButton); // append to nav element
 
 /* RENDER */
 document.addEventListener("DOMContentLoaded", () => {
   main.append(searchBarContainer, cardContainer);
   body.appendChild(main, navigation);
-  // body.appendChild(navigation);
 });
