@@ -1,6 +1,7 @@
 import { createCharacterCard } from "./components/card/card.js";
 // import { createPagination } from "./components/nav-pagination/nav-pagination.js";
 import { createSearchBar } from "./components/search-bar/search-bar.js";
+
 const cardContainer = document.querySelector('[data-js="card-container"]');
 const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
@@ -24,6 +25,7 @@ async function fetchAndRenderData() {
   queryPage = `/?page=${page}`;
   let queryName = `&name=${searchQuery}`;
   queryUrl = baseUrl + queryPage + queryName;
+  console.log("queryURL", queryUrl);
   try {
     // fetching data
     const response = await fetch(queryUrl);
@@ -53,6 +55,7 @@ async function fetchAndRenderData() {
       // console.log("charType: ", charType);
       // console.log("charOccurences: ", charOccurences);
       const card = createCharacterCard(
+        charId,
         charImage,
         charName,
         charStatus,
@@ -92,6 +95,7 @@ searchBar.addEventListener("submit", (e) => {
   console.log(e.target.querySelector("input").value);
   fetchAndRenderData();
 });
+
 // Next Button
 nextButton.addEventListener("click", () => {
   if (page < maxPage) {
