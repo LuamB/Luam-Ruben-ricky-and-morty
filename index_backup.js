@@ -12,7 +12,8 @@ const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
 const baseUrl = "https://rickandmortyapi.com/api/character";
 // Initaial State!
-let maxPage; //characterData.info.pages
+
+let maxPage; //data.info.pages
 let page = 1;
 let searchQuery = "";
 let queryPage = `/?page=${page}`;
@@ -28,17 +29,17 @@ async function fetchAndRenderData() {
     const response = await fetch(queryUrl);
     console.log("response:", response);
     if (!response.ok) {
-      console.error("Bad request ->", response.status);
+      console.error(`Bad request -> ${response.status}`);
       return;
     }
     // parsing data
-    const characterData = await response.json();
-    console.log("data", characterData);
+    const data = await response.json();
+    console.log("data", data);
     // pagination
-    maxPage = characterData.info.pages;
+    maxPage = data.info.pages;
     pagination.textContent = `${page} / ${maxPage}`;
     // compile cards
-    characterData.results.forEach((character) => {
+    data.results.forEach((character) => {
       const charId = character.id;
       const charImage = character.image;
       const charName = character.name;
@@ -74,6 +75,7 @@ buttonElement.appendChild(imgElement);
 // append inputElement and buttonElement to the searchBar
 searchBar.appendChild(inputElement);
 searchBar.appendChild(buttonElement);
+
 // // Search input
 // inputElement.addEventListener("input", (e) => {
 //   e.preventDefault();
@@ -81,6 +83,7 @@ searchBar.appendChild(buttonElement);
 //   fetchAndRenderData();
 // });
 // review INPUT AND STRINGS
+
 // Search Button
 searchBar.addEventListener("submit", (e) => {
   e.preventDefault();
