@@ -1,4 +1,4 @@
-import { fetchCharacters } from "../../index.js";
+// import { fetchCharacters } from "../../index.js";
 
 export function createSearchBar() {
   // create search bar element
@@ -24,20 +24,21 @@ export function createSearchBar() {
   imgElement.src = "assets/magnifying-glass.png";
   imgElement.alt = "";
 
-  // rendering
-  buttonElement.append(imgElement);
-  searchBar.append(inputElement);
-  searchBar.appendChild(buttonElement);
+  // // rendering
+  // buttonElement.append(imgElement);
+  // searchBar.append(inputElement);
+  // searchBar.appendChild(buttonElement);
 
-  // handle search event
-  searchBar.addEventListener("submit", handleSearch);
+  // // handle search event
+  // searchBar.addEventListener("submit", handleSearch);
 
-  return searchBar;
+  // return searchBar; // goes with index.js
+  return [inputElement, buttonElement, imgElement];
 }
 
-function handleSearch(e) {
-  e.preventDefault();
-  searchQuery = ""; // empty search
-  searchQuery = e.target.elements.query.value;
-  fetchCharacters(page);
-}
+// function handleSearch(e) {
+//   e.preventDefault();
+//   searchQuery = ""; // empty search
+//   searchQuery = e.target.elements.query.value;
+//   fetchCharacters(page);
+// }

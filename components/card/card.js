@@ -7,8 +7,8 @@ export function createCharacterCard(
   charOccurences
 ) {
   const cardElement = document.createElement("li"); // create new list item element = card
+  cardElement.classList.add("card");
   cardElement.innerHTML = `
-    <li class="card">
       <div class="card__image-container">
         <img
             class="card__image"
@@ -27,8 +27,7 @@ export function createCharacterCard(
           <dt class="card__info-title">Occurrences</dt>
           <dd class="card__info-description">${charOccurences}</dd>
         </dl>
-      </div>
-    </li>`;
+      </div>`;
 
   return cardElement;
 }
