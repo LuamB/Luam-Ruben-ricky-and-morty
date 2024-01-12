@@ -1,4 +1,5 @@
 export function createCharacterCard(
+  charId,
   charImage,
   charName,
   charStatus,

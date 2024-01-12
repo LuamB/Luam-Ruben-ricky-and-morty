@@ -12,6 +12,7 @@ const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
 const baseUrl = "https://rickandmortyapi.com/api/character";
 // Initaial State!
+
 let maxPage; //data.info.pages
 let page = 1;
 let searchQuery = "";

@@ -1,28 +1,27 @@
-import { fetchCharacters } from "../../index.js";
-
-export function createButton() {
-  // create previous button element
+// import { fetchCharacters } from "../../index.js";
+export function createButton(page, maxPage) {
   const prevButton = document.createElement("button");
   prevButton.classList.add("button--prev");
+  prevButton.textContent = "previous";
 
-  // create next button element
   const nextButton = document.createElement("button");
-  nextButton.classList.add("button--next");
+  nextButton.classList.add("button--prev");
+  nextButton.textContent = "next";
 
+  //   prevButton.addEventListener("click", () => {
+  //     if (page > 1) {
+  //       page--;
+  //       // Update the page number and fetch the data again
+  //       fetchCharacters();
+  //     }
+  //   });
+
+  //   nextButton.addEventListener("click", () => {
+  //     if (page < maxPage) {
+  //       page++;
+  //       // Update the page number and fetch the data again
+  //       fetchCharacters();
+  //     }
+  //   });
   return [prevButton, nextButton];
-}
-
-export function handlePrevButton(page) {
-  if (page > 1) {
-    page--;
-    fetchCharacters(page);
-  }
-}
-
-export function handleNextButton(page, maxPage) {
-  console.log("page", page);
-  if (page < maxPage) {
-    page++;
-    fetchCharacters(page);
-  }
 }
