@@ -11,7 +11,7 @@ const searchBarContainer = document.querySelector(
   '[data-js="search-bar-container"]'
 );
 const cardContainer = document.querySelector("ul");
-let navigation = document.querySelector('[data-js="navigation"]');
+const navigation = document.querySelector('[data-js="navigation"]');
 
 /* States */
 let maxPage = 1;
@@ -35,7 +35,7 @@ export async function fetchCharacters() {
   }
 }
 // function call
-let data = await fetchCharacters();
+const data = await fetchCharacters();
 console.log("data", data);
 console.log("page", page);
 
@@ -64,26 +64,19 @@ console.log(`page: ${page} | maxPage:${maxPage}`);
 // create page navigation buttons
 const [prevButton, nextButton] = createButton(page, maxPage); // create navigation buttons
 
-// add functionality
-prevButton.addEventListener("click", () => {
-  if (page > 1) {
-    page--;
-    // Update the page number and fetch the data again
-    fetchCharacters();
-  }
+// add button functionality
+prevButton.addEventListener("click", async () => {
+  page > 1 && (page--, await fetchCharacters()); // Update the page number and fetch the data again
 });
-
 nextButton.addEventListener("click", async () => {
-  if (page < maxPage) {
-    page++;
-    await fetchCharacters();
-  }
+  page < maxPage && (page++, await fetchCharacters());
 });
 
 console.log("page", page);
 
 const pagination = createPagination(page, maxPage); // create pagination element
-pagination.textContent = `${page} / ${maxPage}`;
+console.log("page", page);
+// pagination.textContent = `${page} / ${maxPage}`;
 navigation.append(prevButton, pagination, nextButton); // append to nav element
 
 /* RENDER */
