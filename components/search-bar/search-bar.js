@@ -24,16 +24,16 @@ export function createSearchBar() {
   imgElement.src = "assets/magnifying-glass.png";
   imgElement.alt = "";
 
-  // // rendering
-  // buttonElement.append(imgElement);
-  // searchBar.append(inputElement);
-  // searchBar.appendChild(buttonElement);
+  // rendering
+  buttonElement.append(imgElement);
+  searchBar.append(inputElement);
+  searchBar.appendChild(buttonElement);
 
   // // handle search event
   // searchBar.addEventListener("submit", handleSearch);
 
-  // return searchBar; // goes with index.js
-  return [inputElement, buttonElement, imgElement];
+  return searchBar; // goes with index.js
+  // return [inputElement, buttonElement, imgElement];
 }
 
 // function handleSearch(e) {

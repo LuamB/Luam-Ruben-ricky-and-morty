@@ -1,6 +1,6 @@
-export function createPagination(page, maxPage) {
+export default function createNavPagination() {
   const pagination = document.createElement("span");
   pagination.classList.add("navigation__pagination");
-  pagination.textContent = `${page} / ${maxPage}`;
+  pagination.textContent = "1 / 1";
   return pagination;
 }

@@ -36,26 +36,37 @@ export async function fetchCharacters() {
 }
 // function call
 const data = await fetchCharacters();
+fillContainer(data);
 console.log("data", data);
 console.log("page", page);
 
 /* CARDS */
-data.results.forEach((character) => {
-  const card = createCharacterCard(
-    character.id,
-    character.image,
-    character.name,
-    character.status,
-    character.type,
-    character.episode.length
-  );
-  // render cards
-  cardContainer.append(card);
-});
+function fillContainer(data) {
+  data.results.forEach((character) => {
+    const card = createCharacterCard(
+      // character.id,
+      character.image,
+      character.name,
+      character.status,
+      character.type,
+      character.episode.length
+    );
+    // render cards
+    cardContainer.append(card);
+  });
+}
 
 /* SEARCH BAR */
 const searchBar = createSearchBar(); // create search bar
 searchBarContainer.append(searchBar); // append to container
+// add functionality ---> replace with onSubmit
+searchBar.addEventListener("submit", (e) => {
+  e.preventDefault();
+  // searchQuery = e.target.elements.query.value;
+  searchQuery = e.target.querySelector("input").value;
+  console.log(`searchQuery: "${e.target.querySelector("input").value}`);
+  fetchAndRenderData();
+});
 
 /* PAGINATION */
 maxPage = data.info.pages;
@@ -64,13 +75,21 @@ console.log(`page: ${page} | maxPage:${maxPage}`);
 // create page navigation buttons
 const [prevButton, nextButton] = createButton(page, maxPage); // create navigation buttons
 
-// add button functionality
-prevButton.addEventListener("click", async () => {
-  page > 1 && (page--, await fetchCharacters()); // Update the page number and fetch the data again
-});
-nextButton.addEventListener("click", async () => {
-  page < maxPage && (page++, await fetchCharacters());
-});
+// // add button functionality ---> replace with onClick
+// prevButton.addEventListener("click", async () => {
+//   if (page > 1) {
+//     page--;
+//     const data = await fetchCharacters(); // Update the page number and fetch the data again
+//     fillContainer(data);
+//   }
+// });
+// nextButton.addEventListener("click", async () => {
+//   if (page < maxPage) {
+//     page++;
+//     const data = await fetchCharacters();
+//     fillContainer(data);
+//   }
+// });
 
 console.log("page", page);
 
